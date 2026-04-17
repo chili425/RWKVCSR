@@ -1,0 +1,100 @@
+# general settings for image SR training
+name: RWKVIR_CSR_x4_48_4466_tidu_reparam
+model_type: RWKVIRModel
+scale: 4
+num_gpu: 1
+manual_seed: 10
+
+# dataset and data loader settings
+datasets:
+  test_1:  # the 1st test dataset
+    name: Set5
+    type: PairedImageDataset
+    dataroot_gt: /data/dataset/tql/UCSR_Datasets/Test/Set5/H/
+    dataroot_lq: /data/dataset/tql/UCSR_Datasets/Test/Set5/L/
+    filename_tmpl: '{}'
+    io_backend:
+      type: disk
+
+  # test_2:  # the 2nd test dataset
+  #   name: Set14
+  #   type: PairedImageDataset
+  #   dataroot_gt: /data/dataset/tql/UCSR_Datasets/Test/Set14/HR/
+  #   dataroot_lq: /data/dataset/tql/UCSR_Datasets/Test/Set14/LR_JPEG/40/
+  #   filename_tmpl: '{}'
+  #   io_backend:
+  #     type: disk
+      
+  # test_3:  # the 3rd test dataset
+  #   name: B100
+  #   type: PairedImageDataset
+  #   dataroot_gt: /data/dataset/tql/UCSR_Datasets/Test/BSD100/HR/
+  #   dataroot_lq: /data/dataset/tql/UCSR_Datasets/Test/BSD100/LR_JPEG/40/
+  #   filename_tmpl: '{}'
+  #   io_backend:
+  #     type: disk
+
+  # test_4:  # the 4th test dataset
+  #   name: Urban100
+  #   type: PairedImageDataset
+  #   dataroot_gt: /data/dataset/tql/UCSR_Datasets/Test/Urban100/HR/
+  #   dataroot_lq: /data/dataset/tql/UCSR_Datasets/Test/Urban100/LR_JPEG/40/
+  #   filename_tmpl: '{}'
+  #   io_backend:
+  #     type: disk
+
+  # test_5:  # the 5th test dataset
+  #   name: Manga109
+  #   type: PairedImageDataset
+  #   dataroot_gt: /data/dataset/tql/UCSR_Datasets/Test/Manga109/HR/
+  #   dataroot_lq: /data/dataset/tql/UCSR_Datasets/Test/Manga109/LR_JPEG/40/
+  #   filename_tmpl: '{}'
+  #   io_backend:
+  #     type: disk
+# network structures
+network_g:
+  type: RWKVIR
+  upscale: 4
+  in_chans: 3
+  img_size: 64
+  img_range: 1.
+  depths: [4, 4, 6, 6]
+  patch_size: 16
+  embed_dim: 48
+  mlp_ratio: 1
+  channel_gamma: 0.25
+  shift_pixel: 1
+  hidden_rate: 4
+  init_mode: 'fancy'
+  upsampler: 'pixelshuffle'
+  resi_connection: '1conv'
+
+# path
+path:
+  pretrain_network_g: /data/model/tql/resyn/experiments/RWKVIR_CSR_JPEGq10_48_low_param_tidu_4466_rd_fxjjhebing/models/net_g_195000.pth
+  strict_load_g: false
+val:
+  val_freq: !!float 200
+  save_img: false
+
+  metrics:
+    psnr: # metric name, can be arbitrary
+      type: calculate_psnr
+      crop_border: 4
+      test_y_channel: true
+
+
+
+# logging settings
+logger:
+  print_freq: 200
+  save_checkpoint_freq: !!float 5e3
+  use_tb_logger: true
+  wandb:
+    project: ~
+    resume_id: ~
+
+# dist training settings
+dist_params:
+  backend: nccl
+  port: 29500
