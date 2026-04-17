@@ -1,9 +1,0 @@
-einops
-matplotlib
-numpy
-opencv-python
-PyYAML
-timm
-torch
-torchvision
-tqdm
