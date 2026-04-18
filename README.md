@@ -30,7 +30,7 @@ pip install -e .
 ## Train
 
 ```bash
-python basicsr/train.py -opt options/train/rwkvir/train_RWKVIR_CSR_x4.yml
+python basicsr/train.py -opt options/train/train_CSR_x4.yml
 ```
 
 ## Test
