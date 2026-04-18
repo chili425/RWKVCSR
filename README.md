@@ -48,3 +48,8 @@ python basicsr/test.py -opt options/test/test_CSR.yml
 ## License
 
 This project keeps the original [Apache 2.0](LICENSE) license file.
+
+
+## Acknowledgments
+The basic code is partially from the below repos.
+- [RWKVIR]([https://github.com/csguoh/MambaIR](https://github.com/YuzhenD/Resyn/tree/master))
